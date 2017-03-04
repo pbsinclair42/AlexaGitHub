@@ -1,4 +1,7 @@
 import json
+import decimal
+import boto3
+from botocore.exceptions import ClientError
 from env import requests
 import secrets
 
@@ -24,7 +27,7 @@ def lambda_handler(event, context):
                     "text": ""
                 }
             },
-            "shouldEndSession": False
+            "shouldEndSession": True
           },
       "sessionAttributes": {}
     }
@@ -40,6 +43,26 @@ def lambda_handler(event, context):
             template_response['response']['outputSpeech']['text'] = "Torvalds did some weird shit"
             template_response['response']['card']['content'] = "Torvalds did some weird shit"
             template_response['response']['card']['title'] = "Torvalds activity"
+    elif event['request']['intent']['name'] == 'GetNotificationsIntent':
+        dynamodb = boto3.resource("dynamodb", region_name='us-east-1')
+        table = dynamodb.Table('users')
+        username = 'alexaAwakens'
+        try:
+            response = table.get_item(
+                    Key={
+                        'username': username                    }
+                )
+        except ClientError as e:
+            return e.response
+        else:
+            item = response['Item']
+            password = item['password']
+            notifications = json.loads(requests.get('https://api.github.com/notifications', auth=(username, password)).content)
+            outputSpeech = "You have "+str(len(notifications))+' new notifications.'
+            template_response['response']['outputSpeech']['text'] = outputSpeech
+            template_response['response']['card']['content'] = outputSpeech
+            template_response['response']['card']['title'] = "Notifications for "+username
+            
     else:
         template_response['response']['outputSpeech']['text'] = "//TODO"
         template_response['response']['card']['content'] = "//TODO"
