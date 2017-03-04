@@ -1,0 +1,8 @@
+GetTorvaldsIntent Torvalds
+GetTorvaldsIntent Linus
+GetTorvaldsIntent what's Linus been up to
+GetTorvaldsIntent what's Torvalds been up to
+GetTorvaldsIntent what's Linus Torvalds been up to
+AuthorizeIntent login
+GetNotificationsIntent get my notifications
+GetNotificationsIntent notifications
