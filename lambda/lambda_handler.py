@@ -166,6 +166,31 @@ def lambda_handler(event, context):
                     template_response['response']['card']['content'] = "You did some weird shit with "+activity_type+'s'
                 template_response['response']['card']['title'] = "Your activity"
 
+    elif event['request']['intent']['name'] == 'GetMyRepositoriesIntent':
+        dynamodb = boto3.resource("dynamodb", region_name='us-east-1')
+        table = dynamodb.Table('users')
+        try:
+            response = table.get_item(
+                    Key={
+                        'username': username
+                        }
+                )
+        except ClientError as e:
+            return e.response
+        else:
+            item = response['Item']
+            password = item['password']
+            repos = json.loads(requests.get('https://api.github.com/user/repos', auth=(username, password)).content)
+            repos = map(lambda x: x['name'], repos)
+            if len(repos)>0:
+                response = "You have "+str(len(repos))+' repositories: \n' + '\n'.join(repos)
+                template_response['response']['outputSpeech']['text'] = response
+                template_response['response']['card']['content'] = response
+            else:
+                template_response['response']['outputSpeech']['text'] = "You have no repositories"
+                template_response['response']['card']['content'] = "You have no repositories"
+            template_response['response']['card']['title'] = "Your repositories"
+
     elif event['request']['intent']['name'] == 'AMAZON.StopIntent':
         responses = ['See ya', 'Bye', 'Cheerio', "Don't leave me!", "Come back any time"]
         response = choice(responses)

@@ -5,6 +5,7 @@
    { "intent": "NextNotificationIntent" },
    { "intent": "RepeatNotificationIntent" },
    { "intent": "MyActivityIntent" },
+   { "intent": "GetMyRepositoriesIntent" },
    { "intent": "AMAZON.HelpIntent" },
    { "intent": "AMAZON.StopIntent" },
    { "intent": "AMAZON.CancelIntent" }
