@@ -27,3 +27,10 @@ AMAZON.StopIntent thanks
 AMAZON.StopIntent that'll do
 AMAZON.StopIntent cheers
 AMAZON.StopIntent bye
+MyActivityIntent what I've done recently
+MyActivityIntent what I last did
+MyActivityIntent what I did last
+MyActivityIntent what my activity has been
+MyActivityIntent what have I done recently
+MyActivityIntent what did I last do
+MyActivityIntent what the last thing I did was

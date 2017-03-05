@@ -1,11 +1,12 @@
  { 
   "intents": [ 
    { "intent": "GetTorvaldsIntent" },
-   { "intent": "GetNumNotificationsIntent" }, 
-   { "intent": "NextNotificationIntent" }, 
-   { "intent": "RepeatNotificationIntent" }, 
-   { "intent": "AMAZON.HelpIntent" }, 
-   { "intent": "AMAZON.StopIntent" }, 
+   { "intent": "GetNumNotificationsIntent" },
+   { "intent": "NextNotificationIntent" },
+   { "intent": "RepeatNotificationIntent" },
+   { "intent": "MyActivityIntent" },
+   { "intent": "AMAZON.HelpIntent" },
+   { "intent": "AMAZON.StopIntent" },
    { "intent": "AMAZON.CancelIntent" }
   ] 
  }

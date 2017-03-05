@@ -128,6 +128,44 @@ def lambda_handler(event, context):
             template_response['response']['card']['content'] = notification
             template_response['response']['card']['title'] = "Newest notification for "+username
             template_response['response']['shouldEndSession'] = False
+
+    elif event['request']['intent']['name'] == 'MyActivityIntent':
+        dynamodb = boto3.resource("dynamodb", region_name='us-east-1')
+        table = dynamodb.Table('users')
+        try:
+            response = table.get_item(
+                    Key={
+                        'username': username
+                        }
+                )
+        except ClientError as e:
+            return e.response
+        else:
+            item = response['Item']
+            password = item['password']
+            activity = json.loads(requests.get('https://api.github.com/users/'+username+'/events', auth=(username, password)).content)
+            try:
+                activity = activity[0]
+            except IndexError:
+                template_response['response']['outputSpeech']['text'] = "No activity"
+                template_response['response']['card']['content'] = "No activity"
+                template_response['response']['card']['title'] = "Your activity"
+            else:
+                activity_type = activity['type'][:-5]
+                if activity_type=='Push':
+                    repo = activity['repo']['name']
+                    commits = map(lambda x : x['message'], activity['payload']['commits'])
+                    if len(commits)==1:
+                        response = "You pushed a commit with message; '"+commits[0]+"'; to the repository, "+repo
+                    else:
+                        response = "You pushed "+len(commits)+' to the repository, '+repo+' . These were:\n'+'\n'.join(commits)
+                    template_response['response']['outputSpeech']['text'] = response
+                    template_response['response']['card']['content'] = response
+                else:
+                    template_response['response']['outputSpeech']['text'] = "You did some weird shit with "+activity_type+'s'
+                    template_response['response']['card']['content'] = "You did some weird shit with "+activity_type+'s'
+                template_response['response']['card']['title'] = "Your activity"
+
     elif event['request']['intent']['name'] == 'AMAZON.StopIntent':
         responses = ['See ya', 'Bye', 'Cheerio', "Don't leave me!", "Come back any time"]
         response = choice(responses)
