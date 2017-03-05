@@ -1,5 +1,6 @@
 import json
 import decimal
+import re
 import dateutil.parser
 from datetime import timedelta
 from random import choice
@@ -373,7 +374,6 @@ def lambda_handler(event, context):
                 template_response['response']['card']['title'] = "Open pull Requests in "+repo_name
 
     elif event['request']['intent']['name'] == 'StalkIntent':
-        dynamodb = boto3.resource("dynamodb", region_name='us-east-1')
         user_name = event['request']['intent']['slots']['username']['value'].split( )
         user_name = map(lambda x: x.lower(), user_name)
         mapping = {
@@ -424,6 +424,33 @@ def lambda_handler(event, context):
                 template_response['response']['outputSpeech']['text'] = user_name+"hasn't done anything yet"
                 template_response['response']['card']['content'] = user_name+"hasn't done anything yet"
             template_response['response']['card']['title'] = user_name + "'s latest activity"
+
+    elif event['request']['intent']['name'] == 'ProfanityIntent':
+
+        profanity = ['\barse\b', 'bastard', 'bitch', 'bloody', 'bollocks', '\bcock', '\bcunt\b', '\bdamn\b', 
+                     '\bdick\b', '\bfml\b', 'fuck', '\bnaff\b', '\bpiss', '\bpoo\b', 'shit', '\btits\b', 
+                     '\btosser\b', '\btwat', '\bwank', '\bwhore', '\bwtf\b', '\btifu\b']
+
+        for i in range(1,4):
+            events = json.loads(requests.get('https://api.github.com/events?page='+str(i)+'&per_page=100&access_token='+secrets.TOKEN).content)
+            try:
+                commits = [event['payload']['commits'] for event in events if event['type']=='PushEvent']
+            except TypeError:
+                return events
+            messages = [item['message'].split('\n\n')[0] for sublist in commits for item in sublist]
+            for message in messages:
+                if re.match(r".*(" + '|'.join(profanity) + ").*", message, re.IGNORECASE):
+                    if not re.match(r"^Merge", message, re.IGNORECASE):
+                        template_response['response']['outputSpeech']['text'] = "Found an angry programmer!  They say: \n"+message
+                        template_response['response']['card']['content'] = "Found an angry programmer!  They say: \n"+message
+                        template_response['response']['card']['title'] = "Profanity detected!"
+                        return template_response
+        message = choice([ "Shit code is shit, but shit code is doin' what shit code is supposed to do, so i dont give a shit",
+            "Fuck Windows."
+            ])
+        template_response['response']['outputSpeech']['text'] = "No one's angry just now, so here's one from the archive: \n"+message
+        template_response['response']['card']['content'] = "No one's angry just now, so here's one from the archive: \n"+message
+        template_response['response']['card']['title'] = "No profanity detected"
 
     elif event['request']['intent']['name'] == 'AMAZON.StopIntent':
         responses = ['See ya', 'Bye', 'Cheerio', "Don't leave me!", "Come back any time"]

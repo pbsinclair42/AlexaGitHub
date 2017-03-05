@@ -92,3 +92,9 @@ StalkIntent to stalk {p b sinclair four two|username}
 StalkIntent to stalk {patch green nine nine|username}
 StalkIntent to stalk {n lynch seven one|username}
 StalkIntent to stalk {e o bankova|username}
+ProfanityIntent get profanity
+ProfanityIntent find an angry programmer
+ProfanityIntent find anger
+ProfanityIntent to get profanity
+ProfanityIntent to find an angry programmer
+ProfanityIntent to find anger

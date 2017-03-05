@@ -19,7 +19,7 @@ Then copy into secrets.txt the secrets which have been shared with you.
 - Get open pull requests on repo ✓
 - Get number of followers to repo
 - Stalk a user by username ✓
-- Get profanity
+- Get profanity ✓
 
 ### Stretch Goals:
 

@@ -41,6 +41,7 @@
          "type": "AMAZON.LITERAL"
        }
      ]},
+   { "intent": "ProfanityIntent" },
    { "intent": "AMAZON.HelpIntent" },
    { "intent": "AMAZON.StopIntent" },
    { "intent": "AMAZON.CancelIntent" }
