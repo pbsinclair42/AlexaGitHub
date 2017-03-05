@@ -14,7 +14,7 @@ Then copy into secrets.txt the secrets which have been shared with you.
 - Get my last activity ✓ though only push events have decent blurb
 - Get my repositories ✓
 - Get most recent commit to repo ✓
-- Get most recent activity of repo
+- Get most recent activity of repo ✓
 - Get number of open issues on repo
 - Get number of open pull requests on repo
 - Get number of followers to repo

@@ -234,6 +234,54 @@ def lambda_handler(event, context):
                     template_response['response']['card']['content'] = "No commits in repository "+repo_name
                 template_response['response']['card']['title'] = "Latest commit in "+repo_name
 
+    elif event['request']['intent']['name'] == 'GetLastActivityIntent':
+        dynamodb = boto3.resource("dynamodb", region_name='us-east-1')
+        table = dynamodb.Table('users')
+        try:
+            response = table.get_item(
+                    Key={
+                        'username': username
+                        }
+                )
+        except ClientError as e:
+            return e.response
+        else:
+            item = response['Item']
+            password = item['password']
+            repo_name = event['request']['intent']['slots']['repoName']['value'].split( )
+            repo_name = map(lambda x: x.lower(), repo_name)
+            for i in range(len(repo_name)):
+                if repo_name[i]=='dash':
+                    repo_name[i]='-'
+                if repo_name[i]=='underscore':
+                    repo_name[i]='_'
+                if repo_name[i]=='plus':
+                    repo_name[i]='+'
+                if repo_name[i]=='slash':
+                    repo_name[i]='/'
+            repo_name = ''.join(repo_name)
+
+            events = json.loads(requests.get('https://api.github.com/repos/'+username+'/'+repo_name+'/events', auth=(username, password)).content)
+            try:
+                events['message']
+                template_response['response']['outputSpeech']['text'] = "Unknown repository "+repo_name
+                template_response['response']['card']['content'] = "Unknown repository "+repo_name
+            except TypeError:
+                activity = events[0]
+                activity_type = activity['type'][:-5]
+                if activity_type=='Push':
+                    repo = activity['repo']['name']
+                    commits = map(lambda x : x['message'], activity['payload']['commits'])
+                    if len(commits)==1:
+                        response = "A commit with message; '"+commits[0]+"'; was pushed to the repository, "+repo+', by '+activity['actor']['display_login']
+                    else:
+                        response = str(len(commits))+' were pushed to the repository, '+repo+', by '+activity['actor']['display_login']+' . These were:\n'+';\n'.join(commits)
+                    template_response['response']['outputSpeech']['text'] = response
+                    template_response['response']['card']['content'] = response
+                else:
+                    template_response['response']['outputSpeech']['text'] = "Some weird shit to do with "+activity_type+'s stuff was done to the repo '+repo+', by '+activity['actor']['display_login']
+                    template_response['response']['card']['content'] = "Some weird shit to do with "+activity_type+'s stuff was done to the repo '+repo+', by '+activity['actor']['display_login']
+
     elif event['request']['intent']['name'] == 'AMAZON.StopIntent':
         responses = ['See ya', 'Bye', 'Cheerio', "Don't leave me!", "Come back any time"]
         response = choice(responses)

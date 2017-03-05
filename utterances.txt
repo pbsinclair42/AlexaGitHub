@@ -53,3 +53,10 @@ GetLastCommitsIntent for the last commit in {repo underscore name|repoName}
 GetLastCommitsIntent for the last commit in {repo dash name|repoName}
 GetLastCommitsIntent for the last commit in {open C V|repoName}
 GetLastCommitsIntent for the last commit in {open C V|repoName}
+GetLastActivityIntent for the last activity in {repo|repoName}
+GetLastActivityIntent for the last activity in {test repo|repoName}
+GetLastActivityIntent for the last activity in {test underscore repo|repoName}
+GetLastActivityIntent for the last activity in {repo underscore name|repoName}
+GetLastActivityIntent for the last activity in {repo dash name|repoName}
+GetLastActivityIntent for the last activity in {open C V|repoName}
+GetLastActivityIntent for the last activity in {open C V|repoName}
