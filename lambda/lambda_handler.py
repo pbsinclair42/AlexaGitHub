@@ -2,6 +2,7 @@ import json
 import decimal
 import dateutil.parser
 from datetime import timedelta
+from random import choice
 import boto3
 from botocore.exceptions import ClientError
 from env import requests
@@ -127,6 +128,13 @@ def lambda_handler(event, context):
             template_response['response']['card']['content'] = notification
             template_response['response']['card']['title'] = "Newest notification for "+username
             template_response['response']['shouldEndSession'] = False
+    elif event['request']['intent']['name'] == 'AMAZON.StopIntent':
+        responses = ['See ya', 'Bye', 'Cheerio', "Don't leave me!", "Come back any time"]
+        response = choice(responses)
+        template_response['response']['outputSpeech']['text'] = response
+        template_response['response']['card']['content'] = response
+        template_response['response']['card']['title'] = "Exit Message"
+
     else:
         template_response['response']['outputSpeech']['text'] = "//TODO"
         template_response['response']['card']['content'] = "//TODO"
