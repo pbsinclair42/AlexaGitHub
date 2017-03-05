@@ -51,16 +51,26 @@ GetLastCommitsIntent for the last commit in {test repo|repoName}
 GetLastCommitsIntent for the last commit in {test underscore repo|repoName}
 GetLastCommitsIntent for the last commit in {repo underscore name|repoName}
 GetLastCommitsIntent for the last commit in {repo dash name|repoName}
+GetLastCommitsIntent for the last commit in {befunge dash compiler|repoName}
 GetLastCommitsIntent for the last commit in {open C V|repoName}
 GetLastActivityIntent for the last activity in {repo|repoName}
 GetLastActivityIntent for the last activity in {test repo|repoName}
 GetLastActivityIntent for the last activity in {test underscore repo|repoName}
 GetLastActivityIntent for the last activity in {repo underscore name|repoName}
 GetLastActivityIntent for the last activity in {repo dash name|repoName}
+GetLastActivityIntent for the last activity in {befunge dash compiler|repoName}
 GetLastActivityIntent for the last activity in {open C V|repoName}
 GetIssuesIntent for the issues in {repo|repoName}
 GetIssuesIntent for the issues in {test repo|repoName}
 GetIssuesIntent for the issues in {test underscore repo|repoName}
 GetIssuesIntent for the issues in {repo underscore name|repoName}
 GetIssuesIntent for the issues in {repo dash name|repoName}
+GetIssuesIntent for the issues in {befunge dash compiler|repoName}
 GetIssuesIntent for the issues in {open C V|repoName}
+GetPullsIntent for the pull requests in {repo|repoName}
+GetPullsIntent for the pull requests in {test repo|repoName}
+GetPullsIntent for the pull requests in {test underscore repo|repoName}
+GetPullsIntent for the pull requests in {repo underscore name|repoName}
+GetPullsIntent for the pull requests in {repo dash name|repoName}
+GetPullsIntent for the pull requests in {befunge dash compiler|repoName}
+GetPullsIntent for the pull requests in {open C V|repoName}
