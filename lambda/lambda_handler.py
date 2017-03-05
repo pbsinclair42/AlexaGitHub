@@ -444,9 +444,41 @@ def lambda_handler(event, context):
                         template_response['response']['outputSpeech']['text'] = "Found an angry programmer!  They say: \n"+message
                         template_response['response']['card']['content'] = "Found an angry programmer!  They say: \n"+message
                         template_response['response']['card']['title'] = "Profanity detected!"
+                        template_response['response']['outputSpeech']['text'] = ''.join([a for a in template_response['response']['outputSpeech']['text'] if a not in '<>[]{}'])
                         return template_response
         message = choice([ "Shit code is shit, but shit code is doin' what shit code is supposed to do, so i dont give a shit",
-            "Fuck Windows."
+            "Fuck Windows.",
+            "added some shit file to git ignore",
+            "Shitty message because Ive made a ton of changes",
+            "git fucking work",
+            "Shit works yo",
+            "fix: fix regexp again, fuck fucking windows fuck fucking fuck",
+            "trying to fucking merge again",
+            "New shit, Signed-off-by: Dudley <dudleydawes@hotmail.co.uk>",
+            "Fucklord McPenisPumpe",
+            "WE CAN FUCKING SEND EVERYTHING FUCK YEAH",
+            "holy fucking shit gui so hard",
+            "holy shit i'm bad at literally everything",
+            "fixed my monumental fuckup",
+            "Added checkup table to new SQL script, in case shit...",
+            "Yay, I can invent bicycles! Fuck!",
+            "After 3 hours of suffer, I finally reazlied that I have an online JSON on Firebase, so there is no need to implement own server...fuck me",
+            "RE-ADDED ALL MY APIS, THE NEXT DUDE THAT REMOVES MY SHIT I WILL REPORT YOU TO THE POLICE",
+            "improved error handling when connecting/disconnecting, improved youtube duration parsing, more penis shit",
+            "senpai better be fucking pleased",
+            "I CANT FUCKING DEAL WITH GIT",
+            "git fuck it",
+            "fuck it ship it",
+            "FUCKING WORKING SEARCH FUNCTIONALITY PUSHING INTO MAIN PAGE WOOOOOOO",
+            "Shitty respawn changes that mostly don't work",
+            "Fixed Jospeh's Fuck up",
+            "How the fuck does REDIS work?",
+            "A FRONTEND DEV MUST FIX A BACKEND DEVS NOOBY SHIT",
+            "Mike fucks everything up",
+            "If we don't deploy, the investors walk. Hurry. The. Fuck. Up.",
+            'Revert "Shit the bed if this works!"',
+            "holy fuck i do not know shit about objective-c",
+            "ramen is fucking hot yo"
             ])
         template_response['response']['outputSpeech']['text'] = "No one's angry just now, so here's one from the archive: \n"+message
         template_response['response']['card']['content'] = "No one's angry just now, so here's one from the archive: \n"+message
@@ -463,5 +495,6 @@ def lambda_handler(event, context):
         template_response['response']['outputSpeech']['text'] = "//TODO"
         template_response['response']['card']['content'] = "//TODO"
         template_response['response']['card']['title'] = "//TODO"
-        
+    
+    template_response['response']['outputSpeech']['text'] = ''.join([a for a in template_response['response']['outputSpeech']['text'] if a not in '<>[]{}'])
     return template_response
