@@ -282,6 +282,47 @@ def lambda_handler(event, context):
                     template_response['response']['outputSpeech']['text'] = "Some weird shit to do with "+activity_type+'s stuff was done to the repo '+repo+', by '+activity['actor']['display_login']
                     template_response['response']['card']['content'] = "Some weird shit to do with "+activity_type+'s stuff was done to the repo '+repo+', by '+activity['actor']['display_login']
 
+    elif event['request']['intent']['name'] == 'GetIssuesIntent':
+        dynamodb = boto3.resource("dynamodb", region_name='us-east-1')
+        table = dynamodb.Table('users')
+        try:
+            response = table.get_item(
+                    Key={
+                        'username': username
+                        }
+                )
+        except ClientError as e:
+            return e.response
+        else:
+            item = response['Item']
+            password = item['password']
+            repo_name = event['request']['intent']['slots']['repoName']['value'].split( )
+            repo_name = map(lambda x: x.lower(), repo_name)
+            for i in range(len(repo_name)):
+                if repo_name[i]=='dash':
+                    repo_name[i]='-'
+                if repo_name[i]=='underscore':
+                    repo_name[i]='_'
+                if repo_name[i]=='plus':
+                    repo_name[i]='+'
+                if repo_name[i]=='slash':
+                    repo_name[i]='/'
+            repo_name = ''.join(repo_name)
+
+            issues = json.loads(requests.get('https://api.github.com/repos/'+username+'/'+repo_name+'/issues', auth=(username, password)).content)
+            try:
+                issues['message']
+                template_response['response']['outputSpeech']['text'] = "Unknown repository "+repo_name
+                template_response['response']['card']['content'] = "Unknown repository "+repo_name
+            except TypeError:
+                if len(issues)>0:
+                    response = ';\n'.join(["Issue "+str(i+1)+' from '+issue['user']['login']+': '+issue['title']+';' for i, issue in enumerate(issues)])
+                    template_response['response']['outputSpeech']['text'] = response
+                    template_response['response']['card']['content'] = response
+                else:
+                    template_response['response']['outputSpeech']['text'] = "No issues in repository "+repo_name
+                    template_response['response']['card']['content'] = "No issues in repository "+repo_name
+                template_response['response']['card']['title'] = "Issues in "+repo_name
     elif event['request']['intent']['name'] == 'AMAZON.StopIntent':
         responses = ['See ya', 'Bye', 'Cheerio', "Don't leave me!", "Come back any time"]
         response = choice(responses)

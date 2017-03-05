@@ -20,6 +20,13 @@
          "type": "AMAZON.LITERAL"
        }
      ]},
+   { "intent": "GetIssuesIntent",
+     "slots": [
+       {
+         "name": "repoName",
+         "type": "AMAZON.LITERAL"
+       }
+     ]},
    { "intent": "AMAZON.HelpIntent" },
    { "intent": "AMAZON.StopIntent" },
    { "intent": "AMAZON.CancelIntent" }
