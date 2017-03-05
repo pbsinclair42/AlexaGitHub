@@ -3,6 +3,27 @@ GetTorvaldsIntent Linus
 GetTorvaldsIntent what's Linus been up to
 GetTorvaldsIntent what's Torvalds been up to
 GetTorvaldsIntent what's Linus Torvalds been up to
-AuthorizeIntent login
-GetNotificationsIntent get my notifications
-GetNotificationsIntent notifications
+GetNumNotificationsIntent notifications
+GetNumNotificationsIntent get my notifications
+GetNumNotificationsIntent how many notifications do I have
+GetNumNotificationsIntent how many notifications I have
+GetNumNotificationsIntent if I have any notifications
+GetNumNotificationsIntent if I've got any notifications
+GetNumNotificationsIntent for my notifications
+NextNotificationIntent next notification
+NextNotificationIntent first notification
+NextNotificationIntent next
+NextNotificationIntent first
+NextNotificationIntent skip
+RepeatNotificationIntent pardon
+RepeatNotificationIntent what was that
+RepeatNotificationIntent repeat that
+RepeatNotificationIntent repeat
+RepeatNotificationIntent repeat that please
+RepeatNotificationIntent repeat that notification
+RepeatNotificationIntent repeat that notification please
+AMAZON.StopIntent thank you
+AMAZON.StopIntent thanks
+AMAZON.StopIntent that'll do
+AMAZON.StopIntent cheers
+AMAZON.StopIntent bye

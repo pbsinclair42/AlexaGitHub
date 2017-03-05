@@ -9,9 +9,8 @@ Then copy into secrets.txt the secrets which have been shared with you.
 
 ##TODO:
 
-- Authenticate user
 - Get number of notifications ✓
-- Hear each notificaiton
+- Hear each notificaiton ✓
 - Get my last activity
 - Get my repositories
 - Get most recent commit to repo
@@ -24,4 +23,5 @@ Then copy into secrets.txt the secrets which have been shared with you.
 
 ### Stretch Goals:
 
+- Authenticate user
 - Have you ever heard of this thing called security?  Let's do that.  
