@@ -74,3 +74,21 @@ GetPullsIntent for the pull requests in {repo underscore name|repoName}
 GetPullsIntent for the pull requests in {repo dash name|repoName}
 GetPullsIntent for the pull requests in {befunge dash compiler|repoName}
 GetPullsIntent for the pull requests in {open C V|repoName}
+StalkIntent stalk {torvalds|username}
+StalkIntent stalk {e smith|username}
+StalkIntent stalk {p b sinclair|username}
+StalkIntent stalk {john brown|username}
+StalkIntent stalk {alexa awakens|username}
+StalkIntent stalk {p b sinclair four two|username}
+StalkIntent stalk {patch green nine nine|username}
+StalkIntent stalk {n lynch seven one|username}
+StalkIntent stalk {e o bankova|username}
+StalkIntent to stalk {torvalds|username}
+StalkIntent to stalk {e smith|username}
+StalkIntent to stalk {p b sinclair|username}
+StalkIntent to stalk {john brown|username}
+StalkIntent to stalk {alexa awakens|username}
+StalkIntent to stalk {p b sinclair four two|username}
+StalkIntent to stalk {patch green nine nine|username}
+StalkIntent to stalk {n lynch seven one|username}
+StalkIntent to stalk {e o bankova|username}

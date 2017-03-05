@@ -154,11 +154,13 @@ def lambda_handler(event, context):
                 activity_type = activity['type'][:-5]
                 if activity_type=='Push':
                     repo = activity['repo']['name']
-                    commits = map(lambda x : x['message'], activity['payload']['commits'])
+                    commits = map(lambda x : x['message'].split('\n\n')[0], activity['payload']['commits'])
                     if len(commits)==1:
-                        response = "You pushed a commit with message; '"+commits[0]+"'; to the repository, "+repo
+                        response = "You pushed a commit with message; '"+commits[0].split('\n\n')[0]+"'; to the repository, "+repo
+                    elif len(commits)>5:
+                        response = "You pushed "+str(len(commits))+' commits to the repository, '+repo
                     else:
-                        response = "You pushed "+str(len(commits))+' to the repository, '+repo+' . These were:\n'+';\n'.join(commits)
+                        response = "You pushed "+str(len(commits))+' commits to the repository, '+repo+' . These were:\n'+';\n'.join(commits)
                     template_response['response']['outputSpeech']['text'] = response
                     template_response['response']['card']['content'] = response
                 else:
@@ -225,7 +227,7 @@ def lambda_handler(event, context):
                 template_response['response']['card']['content'] = "Unknown repository "+repo_name
             except TypeError:
                 if len(commits)>0:
-                    message = commits[0]['commit']['message']
+                    message = commits[0]['commit']['message'].split('\n\n')[0]
                     response = "Latest commit to "+repo_name+": \n"+message
                     template_response['response']['outputSpeech']['text'] = response
                     template_response['response']['card']['content'] = response
@@ -271,11 +273,13 @@ def lambda_handler(event, context):
                 activity_type = activity['type'][:-5]
                 if activity_type=='Push':
                     repo = activity['repo']['name']
-                    commits = map(lambda x : x['message'], activity['payload']['commits'])
+                    commits = map(lambda x : x['message'].split('\n\n')[0], activity['payload']['commits'])
                     if len(commits)==1:
                         response = "A commit with message; '"+commits[0]+"'; was pushed to the repository, "+repo+', by '+activity['actor']['display_login']
+                    elif len(commits)>5:
+                        response = str(len(commits))+' commits were pushed to the repository, '+repo+', by '+activity['actor']['display_login']
                     else:
-                        response = str(len(commits))+' were pushed to the repository, '+repo+', by '+activity['actor']['display_login']+' . These were:\n'+';\n'.join(commits)
+                        response = str(len(commits))+' commits were pushed to the repository, '+repo+', by '+activity['actor']['display_login']+' . These were:\n'+';\n'.join(commits)
                     template_response['response']['outputSpeech']['text'] = response
                     template_response['response']['card']['content'] = response
                 else:
@@ -367,6 +371,59 @@ def lambda_handler(event, context):
                     template_response['response']['outputSpeech']['text'] = "No open pull requests in repository "+repo_name
                     template_response['response']['card']['content'] = "No open pull requests in repository "+repo_name
                 template_response['response']['card']['title'] = "Open pull Requests in "+repo_name
+
+    elif event['request']['intent']['name'] == 'StalkIntent':
+        dynamodb = boto3.resource("dynamodb", region_name='us-east-1')
+        user_name = event['request']['intent']['slots']['username']['value'].split( )
+        user_name = map(lambda x: x.lower(), user_name)
+        mapping = {
+            'dash':'-',
+            'underscore':'_',
+            'plus':'+',
+            'slash':'/',
+            'one':'1',
+            'two':'2',
+            'three':'3',
+            'four':'4',
+            'five':'5',
+            'six':'6',
+            'seven':'7',
+            'eight':'8',
+            'nine':'9',
+            'zero':'0'
+        }
+        for i in range(len(user_name)):
+            if user_name[i] in mapping.keys():
+                user_name[i] = mapping[user_name[i]]
+        user_name = ''.join(user_name)
+
+        events = json.loads(requests.get('https://api.github.com/users/'+user_name+'/events').content)
+        try:
+            events['message']
+            template_response['response']['outputSpeech']['text'] = "Unknown user "+user_name
+            template_response['response']['card']['content'] = "Unknown user "+user_name
+        except TypeError:
+            if len(events)>0:
+                activity = events[0]
+                activity_type = activity['type'][:-5]
+                if activity_type=='Push':
+                    repo = activity['repo']['name']
+                    commits = map(lambda x : x['message'].split('\n\n')[0], activity['payload']['commits'])
+                    if len(commits)==1:
+                        response = user_name+" pushed a commit with message; '"+commits[0]+"'; to the repository, "+repo
+                    elif len(commits)>5:
+                        response = user_name+" pushed "+str(len(commits))+' commits to the repository, '+repo
+                    else:
+                        response = user_name+" pushed "+str(len(commits))+' commits to the repository, '+repo+' . These were:\n'+';\n'.join(commits)
+                    template_response['response']['outputSpeech']['text'] = response
+                    template_response['response']['card']['content'] = response
+                else:
+                    template_response['response']['outputSpeech']['text'] = user_name+" did some weird shit with "+activity_type+'s'
+                    template_response['response']['card']['content'] = user_name + " did some weird shit with "+activity_type+'s'
+            else:
+                template_response['response']['outputSpeech']['text'] = user_name+"hasn't done anything yet"
+                template_response['response']['card']['content'] = user_name+"hasn't done anything yet"
+            template_response['response']['card']['title'] = user_name + "'s latest activity"
 
     elif event['request']['intent']['name'] == 'AMAZON.StopIntent':
         responses = ['See ya', 'Bye', 'Cheerio', "Don't leave me!", "Come back any time"]
