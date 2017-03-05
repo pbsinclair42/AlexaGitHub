@@ -1,2 +1,3 @@
 lambda/secrets.py
 lambda/env
+*.zip
