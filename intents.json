@@ -5,7 +5,14 @@
    { "intent": "NextNotificationIntent" },
    { "intent": "RepeatNotificationIntent" },
    { "intent": "MyActivityIntent" },
-   { "intent": "GetMyRepositoriesIntent" },
+   { "intent": "GetMyRepositoriesIntent"},
+   { "intent": "GetLastCommitsIntent",
+     "slots": [
+       {
+         "name": "repoName",
+         "type": "AMAZON.LITERAL"
+       }
+     ]},
    { "intent": "AMAZON.HelpIntent" },
    { "intent": "AMAZON.StopIntent" },
    { "intent": "AMAZON.CancelIntent" }

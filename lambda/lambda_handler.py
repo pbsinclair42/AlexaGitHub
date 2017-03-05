@@ -158,7 +158,7 @@ def lambda_handler(event, context):
                     if len(commits)==1:
                         response = "You pushed a commit with message; '"+commits[0]+"'; to the repository, "+repo
                     else:
-                        response = "You pushed "+len(commits)+' to the repository, '+repo+' . These were:\n'+'\n'.join(commits)
+                        response = "You pushed "+str(len(commits))+' to the repository, '+repo+' . These were:\n'+';\n'.join(commits)
                     template_response['response']['outputSpeech']['text'] = response
                     template_response['response']['card']['content'] = response
                 else:
@@ -183,13 +183,56 @@ def lambda_handler(event, context):
             repos = json.loads(requests.get('https://api.github.com/user/repos', auth=(username, password)).content)
             repos = map(lambda x: x['name'], repos)
             if len(repos)>0:
-                response = "You have "+str(len(repos))+' repositories: \n' + '\n'.join(repos)
+                response = "You have "+str(len(repos))+' repositories: \n' + ';\n'.join(repos)
                 template_response['response']['outputSpeech']['text'] = response
                 template_response['response']['card']['content'] = response
             else:
                 template_response['response']['outputSpeech']['text'] = "You have no repositories"
                 template_response['response']['card']['content'] = "You have no repositories"
             template_response['response']['card']['title'] = "Your repositories"
+
+    elif event['request']['intent']['name'] == 'GetLastCommitsIntent':
+        dynamodb = boto3.resource("dynamodb", region_name='us-east-1')
+        table = dynamodb.Table('users')
+        try:
+            response = table.get_item(
+                    Key={
+                        'username': username
+                        }
+                )
+        except ClientError as e:
+            return e.response
+        else:
+            item = response['Item']
+            password = item['password']
+            repo_name = event['request']['intent']['slots']['repoName']['value'].split( )
+            repo_name = map(lambda x: x.lower(), repo_name)
+            for i in range(len(repo_name)):
+                if repo_name[i]=='dash':
+                    repo_name[i]='-'
+                if repo_name[i]=='underscore':
+                    repo_name[i]='_'
+                if repo_name[i]=='plus':
+                    repo_name[i]='+'
+                if repo_name[i]=='slash':
+                    repo_name[i]='/'
+            repo_name = ''.join(repo_name)
+
+            commits = json.loads(requests.get('https://api.github.com/repos/'+username+'/'+repo_name+'/commits', auth=(username, password)).content)
+            try:
+                commits['message']
+                template_response['response']['outputSpeech']['text'] = "Unknown repository "+repo_name
+                template_response['response']['card']['content'] = "Unknown repository "+repo_name
+            except TypeError:
+                if len(commits)>0:
+                    message = commits[0]['commit']['message']
+                    response = "Latest commit to "+repo_name+": \n"+message
+                    template_response['response']['outputSpeech']['text'] = response
+                    template_response['response']['card']['content'] = response
+                else:
+                    template_response['response']['outputSpeech']['text'] = "No commits in repository "+repo_name
+                    template_response['response']['card']['content'] = "No commits in repository "+repo_name
+                template_response['response']['card']['title'] = "Latest commit in "+repo_name
 
     elif event['request']['intent']['name'] == 'AMAZON.StopIntent':
         responses = ['See ya', 'Bye', 'Cheerio', "Don't leave me!", "Come back any time"]

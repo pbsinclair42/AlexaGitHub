@@ -12,12 +12,12 @@ Then copy into secrets.txt the secrets which have been shared with you.
 - Get number of notifications ✓
 - Hear each notificaiton ✓
 - Get my last activity ✓ though only push events have decent blurb
-- Get my repositories
-- Get most recent commit to repo
+- Get my repositories ✓
+- Get most recent commit to repo ✓
 - Get most recent activity of repo
-- Get number of followers to repo
 - Get number of open issues on repo
 - Get number of open pull requests on repo
+- Get number of followers to repo
 - Stalk a user by username
 - Get profanity
 

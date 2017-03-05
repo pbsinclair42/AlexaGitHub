@@ -46,3 +46,10 @@ GetMyRepositoriesIntent what repositories I have
 GetMyRepositoriesIntent what repos I have
 GetMyRepositoriesIntent get my repositories
 GetMyRepositoriesIntent get my repos
+GetLastCommitsIntent for the last commit in {repo|repoName}
+GetLastCommitsIntent for the last commit in {test repo|repoName}
+GetLastCommitsIntent for the last commit in {test underscore repo|repoName}
+GetLastCommitsIntent for the last commit in {repo underscore name|repoName}
+GetLastCommitsIntent for the last commit in {repo dash name|repoName}
+GetLastCommitsIntent for the last commit in {open C V|repoName}
+GetLastCommitsIntent for the last commit in {open C V|repoName}
